@@ -1,5 +1,0 @@
-train: /home/vuyani/code/Santiago/waste-detection-cv/data/data_train/train
-val: /home/vuyani/code/Santiago/waste-detection-cv/data/data_train/val
-
-nc: 5
-names: ['Metal', 'Plastic', 'Random Trash', 'cardboard', 'glass']
