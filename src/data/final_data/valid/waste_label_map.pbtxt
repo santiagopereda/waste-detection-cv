@@ -1,0 +1,25 @@
+item {
+    name: "Metal",
+    id: 1,
+    display_name: "Metal"
+}
+item {
+    name: "Plastic",
+    id: 2,
+    display_name: "Plastic"
+}
+item {
+    name: "Random Trash",
+    id: 3,
+    display_name: "Random Trash"
+}
+item {
+    name: "cardboard",
+    id: 4,
+    display_name: "cardboard"
+}
+item {
+    name: "glass",
+    id: 5,
+    display_name: "glass"
+}
