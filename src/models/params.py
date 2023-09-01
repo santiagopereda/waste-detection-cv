@@ -1,16 +1,21 @@
 import os
 import numpy as np
+import traceback
 
 ##################  VARIABLES  ##################
+
+##################  ROBOFLOW  ##################
 API_KEY = os.environ.get("API_KEY")
 WORKSPACE = os.environ.get("WORKSPACE")
 PROJECT = os.environ.get("PROJECT")
 VERSION = os.environ.get("VERSION")
+
+##################  YOLOV8  ##################
 LOCATION = os.environ.get("LOCATION")
 CHECKPOINT_DIR =os.environ.get("CHECKPOINT_DIR")
 
-##################  CONSTANTS  #####################
 
+##################  EFFICIENTDET  ##################
 
 
 

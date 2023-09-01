@@ -1,5 +1,6 @@
 from ultralytics import YOLO
 from roboflow import Roboflow
+from src.models.params import *
 
 
 def get_data(api_key: str, workspace: str, project: str, version: str, location: str) -> str:
@@ -80,12 +81,18 @@ def train_model(model=None, data=None, epochs=100, patience=10,
         The trained model.
     """
     try:
-        trained_model = model.train(model=model, data=data, epochs=epochs, patience=patience,
+        trained_model = model.train(data=data, epochs=epochs, patience=patience,
                                     batch=batch, imgsz=imgsz, save_period=save_period, device=device,
                                     project=project, name=name, exist_ok=exist_ok, pretrained=pretrained,
                                     optimizer=optimizer, resume=resume, lr0=lr0, lrf=lrf, dropout=dropout)
-    except:
-        print("Add Model or Data to train on")
-        return None  # Return None if an exception occurs
 
+    except (FileNotFoundError, RuntimeError):
+        print("Add Model or Data to train on")
+        traceback.print_exc()
+        trained_model = None
+
+    except Exception:
+        traceback.print_exc()
+        trained_model = None
+        
     return trained_model

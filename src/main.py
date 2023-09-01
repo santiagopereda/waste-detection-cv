@@ -15,4 +15,4 @@ get_data(API_KEY, WORKSPACE, PROJECT, VERSION, LOCATION)
 
 model = YOLO(pt_model)
 
-results = model.train(data='data.yaml', epochs=50, device='cpu', project=project, name=CHECKPOINT_DIR, exist_ok=True, resume=False)
+results = train_model(model=model, data='/home/spereda/code/santiagopereda/08-Project/waste-detection-cv/data/yolov8/LeWagon-1/data.yaml', epochs=1, project=project, name=CHECKPOINT_DIR, exist_ok=True, resume=False)
