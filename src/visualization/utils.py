@@ -118,7 +118,6 @@ def get_annotated_video(video, model, assigned_class_id, confidence):
         # Release the VideoWriter
         out.release()
 
-
 def yolo2bbox(bboxes):
     """
     Converts YOLO-format bounding boxes to xmin, ymin, xmax, ymax format.

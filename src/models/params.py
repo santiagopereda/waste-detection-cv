@@ -11,6 +11,7 @@ PROJECT = os.environ.get("PROJECT")
 VERSION = os.environ.get("VERSION")
 DATA_TYPE = os.environ.get("DATA_TYPE")
 
+
 ##################  YOLOV8  ##################
 LOCATION = os.environ.get("LOCATION")
 CHECKPOINT_DIR =os.environ.get("CHECKPOINT_DIR")
