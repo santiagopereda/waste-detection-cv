@@ -1,5 +1,3 @@
-
-
 def get_predictions(model, source, conf=0.25, iou=0.7, imgsz=640, classes=None, stream=False):
     """
     Performs object detection inference using the provided model and source.

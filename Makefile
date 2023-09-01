@@ -4,4 +4,3 @@
 ## Install Local Packages
 reinstall_package:
 	@pip uninstall -y src || :
-	@pip install -e .

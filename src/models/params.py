@@ -9,6 +9,8 @@ API_KEY = os.environ.get("API_KEY")
 WORKSPACE = os.environ.get("WORKSPACE")
 PROJECT = os.environ.get("PROJECT")
 VERSION = os.environ.get("VERSION")
+DATA_TYPE = os.environ.get("DATA_TYPE")
+
 
 ##################  YOLOV8  ##################
 LOCATION = os.environ.get("LOCATION")

@@ -3,7 +3,7 @@ from roboflow import Roboflow
 from src.models.params import *
 
 
-def get_data(api_key: str, workspace: str, project: str, version: str, location: str) -> str:
+def get_data(api_key: str, workspace: str, project: str, version: str,data_type: str, location: str) -> str:
     """
     Downloads a dataset version from Roboflow using the provided API key and saves it to the specified location.
 
@@ -24,7 +24,7 @@ def get_data(api_key: str, workspace: str, project: str, version: str, location:
     project = rf.workspace(workspace).project(project)
 
     # Access the desired dataset version within the project and download it to the specified location
-    dataset = project.version(version).download(location)
+    dataset = project.version(version).download(data_type, location)
 
     # Print a success message
     print(f"✅ Data saved in {location}")
