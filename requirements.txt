@@ -160,6 +160,5 @@ wcwidth==0.2.6
 wget==3.2
 zipp==3.16.2
 ultralytics==8.0.167
-urllib3==2.0.4
 wcwidth==0.2.6
 wget==3.2
