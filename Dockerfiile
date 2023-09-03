@@ -1,0 +1,10 @@
+FROM python:3.10.6-buster
+WORKDIR /home/waste-detection-cv
+COPY src src
+COPY requirements.txt requirements.txt
+COPY setup.py setup.py
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+RUN pip install .
+RUN make reinstall_package
+RUN direnv allow

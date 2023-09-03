@@ -1,7 +1,0 @@
-train: /home/spereda/code/santiagopereda/08-Project/waste-detection-cv/data/yolov8/LeWagon-1/train
-val: /home/spereda/code/santiagopereda/08-Project/waste-detection-cv/data/yolov8/LeWagon-1/valid
-test: /home/spereda/code/santiagopereda/08-Project/waste-detection-cv/data/yolov8/LeWagon-1/test
-
-nc: 5
-
-names: ['Metal', 'Plastic', 'Random Trash', 'cardboard', 'glass']

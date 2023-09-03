@@ -1,12 +1,10 @@
 import os
 import streamlit as st
-from src.models.yolo.train_model import define_model
+from src.models.yolo.train_model import define_model, get_dataset_classes
 from src.models.yolo.predict_model import get_predictions
 from src.visualization.utils import custom_clases, get_image_from_serialized, create_temporary_file, get_annotated_video, create_temp_video_from_byte_stream
 
 def main():
-
-    # Here i declare all my functions and variables
 
     model = define_model(
         source='/home/spereda/code/santiagopereda/08-Project/waste-detection-cv/models/yolov8/best.pt')
@@ -17,7 +15,7 @@ def main():
     supported_video_list = ['asf', 'avi', 'gif', 'm4v',
                             'mkv', 'mov', 'mp4', 'mpeg', 'mpg', 'ts', 'wmv', 'webm']
 
-    category_names = list(model.names.values())
+    category_names = get_dataset_classes()
 
     # Empieza el flow
 
