@@ -1,13 +1,13 @@
 import os
 import streamlit as st
+from src.params_yolo import *
 from src.models.yolo.train_model import define_model, get_dataset_classes
 from src.models.yolo.predict_model import get_predictions
 from src.visualization.utils import custom_clases, get_image_from_serialized, create_temporary_file, get_annotated_video, create_temp_video_from_byte_stream
 
 def main():
 
-    model = define_model(
-        source='/home/spereda/code/santiagopereda/08-Project/waste-detection-cv/models/yolov8/best.pt')
+    model = define_model(model_target=MODEL_TARGET)
 
     supported_image_list = ['bmp', 'dng', 'jpeg',
                             'jpg', 'mpo', 'png', 'tif', 'tiff', 'webp', 'pfm']
@@ -130,21 +130,6 @@ def main():
                 get_annotated_video(
                     temp_video_path, model, assigned_class_id=assigned_class_id, confidence=confidence)
 
-                video_path = '/home/spereda/code/santiagopereda/08-Project/waste-detection-cv/src/app/'
-                for filename in os.listdir(video_path):
-                    # or .avi, .mpeg, whatever.
-                    if (filename.endswith(".mp4")):
-                        os.system(
-                            "ffmpeg -i {0} -c:v copy -c:a copy bunny.mp4".format(filename))
-                    else:
-                        continue
-
-                video_file = open(
-                    '/home/spereda/code/santiagopereda/08-Project/waste-detection-cv/src/app/output_video.mp4', 'rb')
-                video_bytes = video_file.read()
-                st.video(video_bytes)
-
-                # cst.video(temp_video_path)
 
     elif choice == "Live":
         st.subheader("Live Action!")

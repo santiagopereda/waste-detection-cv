@@ -77,8 +77,6 @@ def get_dataset_classes():
     return dataset_classes
 
 
-
-
 def train_model(model=None, data=None, epochs=1000, patience=10,
                 batch=10, imgsz=640, save_period=1, device=None, project=None, name=None,
                 exist_ok=True, pretrained=False, optimizer='auto', resume=False,

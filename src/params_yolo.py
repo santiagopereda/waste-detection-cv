@@ -19,6 +19,11 @@ LOCATION = os.environ.get("LOCATION")
 CHECKPOINT_DIR =os.environ.get("CHECKPOINT_DIR")
 MODEL_TARGET = os.environ.get("MODEL_TARGET")
 MODEL_SAVE = os.environ.get("MODEL_SAVE")
+EPOCHS = os.environ.get("EPOCHS")
+PATIENCE = os.environ.get("PATIENCE")
+DEVICE = os.environ.get("DEVICE")
+OPTIMIZER = os.environ.get("OPTIMIZER")
+
 
 ##################  GCP  ##################
 if os.environ.get("KEY_LOCATION") == None:

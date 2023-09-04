@@ -8,6 +8,7 @@ import streamlit as st
 import supervision as sv
 import matplotlib.pyplot as plt
 from src.models.yolo.predict_model import get_predictions
+from src.params_yolo import *
 
 
 def custom_clases(custom_classes, category_names):
@@ -102,7 +103,7 @@ def get_annotated_video(video, model, assigned_class_id, confidence):
         cap.release()
 
         # Configure video parameters
-        output_filename = '/home/spereda/code/santiagopereda/08-Project/waste-detection-cv/src/app/output_video.mp4'
+        output_filename = os.path.join(HOME, 'output.mp4')
         codec = cv2.VideoWriter_fourcc(*'MP4V')
         # Create VideoWriter object
         fps = 30
@@ -117,6 +118,7 @@ def get_annotated_video(video, model, assigned_class_id, confidence):
 
         # Release the VideoWriter
         out.release()
+
 
 def yolo2bbox(bboxes):
     """
