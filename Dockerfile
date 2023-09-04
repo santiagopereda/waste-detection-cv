@@ -4,7 +4,7 @@ COPY app.py app.py
 COPY ./models/yolov8/yolov8n.pt ./models/yolov8/yolov8n.pt
 COPY requirements.txt requirements.txt
 COPY Makefile Makefile
-RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
+RUN apt-get update && apt-get install libgl1 python3-opencv
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 RUN pip install .
