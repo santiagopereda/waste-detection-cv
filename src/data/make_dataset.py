@@ -147,9 +147,9 @@ def save_model_gcp():
         print(f"🚫 Can't find {BUCKET_NAME} in buckets, please verify bucket name")
         print("Model not saved")
 
- if __name__ == '__main__':
-     loaded_dataset = load_data(API_KEY,
-                                WORKSPACE_PROJECT,
-                                WORKSPACE_PROJECT_VERSION,
-                                DATA_TYPE)
+if __name__ == '__main__':
+    loaded_dataset = load_data(API_KEY,
+                              WORKSPACE_PROJECT,
+                              WORKSPACE_PROJECT_VERSION,
+                              DATA_TYPE)
 
