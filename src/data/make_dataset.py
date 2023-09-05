@@ -6,6 +6,7 @@ from src.params_yolo import *
 from gcloud import storage,exceptions
 from src.models.yolo.utils import get_user_input
 
+
 def load_data(key=API_KEY,
               workspace=WORKSPACE,
               project=WORKSPACE_PROJECT,
@@ -23,7 +24,6 @@ def load_data(key=API_KEY,
     Returns:
         Datasets loaded from Roboflow and stores it in the final_data folder under data folder
     """
-    
     data_dir = os.path.join(HOME, 'data', DATA_FOLDER_NAME)
     print("🔍 Searching for existing data directory")
     if not os.path.exists(data_dir):
@@ -42,8 +42,8 @@ def load_data(key=API_KEY,
         save_location = get_data_folder()
         print(f"✅ Using previously downloaded data")
         
-
     return save_location
+
 
 
 def get_data_folder():
@@ -56,7 +56,9 @@ def get_data_folder():
 
     Returns:
         str: The path to the data folder.
-    """ # Go up two levels to waste-detection-cv
+        
+    """ 
+    # Go up two levels to waste-detection-cv
     data_dir = os.path.join(HOME, 'data')
     
     # Check if 'data' directory exists, and create it if not
@@ -72,6 +74,7 @@ def get_data_folder():
         os.makedirs(data_folder)
 
     return data_folder
+
 
 
 def get_models_folder():
@@ -143,3 +146,10 @@ def save_model_gcp():
     except exceptions.NotFound:
         print(f"🚫 Can't find {BUCKET_NAME} in buckets, please verify bucket name")
         print("Model not saved")
+
+ if __name__ == '__main__':
+     loaded_dataset = load_data(API_KEY,
+                                WORKSPACE_PROJECT,
+                                WORKSPACE_PROJECT_VERSION,
+                                DATA_TYPE)
+
