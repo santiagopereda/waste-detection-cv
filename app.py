@@ -1,13 +1,19 @@
-import os
+import base64
+import requests
 import streamlit as st
 from src.params_yolo import *
-from src.models.yolo.train_model import define_model, get_dataset_classes
-from src.models.yolo.predict_model import get_predictions
-from src.visualization.utils import custom_clases, get_image_from_serialized, create_temporary_file, get_annotated_video, create_temp_video_from_byte_stream
+from src.visualization.utils import custom_clases, create_temporary_file
+
+
+def use_requests(api_url, params):
+    response = requests.get(api_url, params=params)
+    return response
 
 def main():
 
-    model = define_model(model_target=MODEL_TARGET)
+    predict_url = 'http://127.0.0.1:8000/predict_photo'
+    
+    predict_video_url = 'http://127.0.0.1:8000/predict_video'
 
     supported_image_list = ['bmp', 'dng', 'jpeg',
                             'jpg', 'mpo', 'png', 'tif', 'tiff', 'webp', 'pfm']
@@ -15,7 +21,7 @@ def main():
     supported_video_list = ['asf', 'avi', 'gif', 'm4v',
                             'mkv', 'mov', 'mp4', 'mpeg', 'mpg', 'ts', 'wmv', 'webm']
 
-    category_names = get_dataset_classes()
+    category_names = requests.get("http://127.0.0.1:8000/classes").json()
 
     # Empieza el flow
 
@@ -75,21 +81,25 @@ def main():
 
                 file_details = {"Filename": data_file.name,
                                 "FileType": data_file.type, "FileSize": data_file.size}
-
-                resized_img = get_image_from_serialized(
-                    data_file, dsize=(640, 640))
-
-                st.image(resized_img)
-
-                st.write(file_details)
-
-                result = get_predictions(
-                    model, resized_img, classes=assigned_class_id, conf=confidence)
-
-                for r in result:
-                    im_array = r.plot()  # plot a BGR numpy array of predictions
-
-                    st.image(im_array, caption='Applied Model')
+                
+                if assigned_class_id == None:
+                    assigned_class_id = "a"
+                    image_dict = {
+                                "resized_img": base64.b64encode(data_file.getvalue()).decode('utf-8'),
+                                "confidence": str(confidence),
+                                "assigned_class_id": assigned_class_id
+                                }
+                else:
+                    image_dict = {
+                                "resized_img": base64.b64encode(data_file.getvalue()).decode('utf-8'),
+                                "confidence": str(confidence),
+                                "assigned_class_id": ",".join(str(e) for e in assigned_class_id)
+                                }
+                
+                
+                response = requests.post(predict_url, data=image_dict)
+                
+                st.image(base64.b64decode((response.text)))
 
     elif choice == "Video":
         # Try Enable GPU on the prediction <bool> """TEST"""
@@ -111,7 +121,7 @@ def main():
 
         data_file = st.sidebar.file_uploader(
             "Upload Video", type=supported_video_list)
-
+        
         if data_file:
             demo_bytes = create_temporary_file(
                 data_file, ext='.avi', delete=False)
@@ -119,18 +129,26 @@ def main():
             st.sidebar.text('Input Video')
 
             st.video(demo_bytes)
+            
+            if assigned_class_id == None:
+                assigned_class_id = "a"
+                video_dict = {
+                            "video": base64.b64encode(data_file.getvalue()).decode('utf-8'),
+                            "confidence": str(confidence),
+                            "assigned_class_id": assigned_class_id
+                            }
+            else:
+                video_dict = {
+                            "video": base64.b64encode(data_file.getvalue()).decode('utf-8'),
+                            "confidence": str(confidence),
+                            "assigned_class_id": ",".join(str(e) for e in assigned_class_id)
+                            }
 
-            # st.write(type(demo_bytes))
 
             if st.sidebar.button("Test Model"):
-
-                temp_video_path = create_temp_video_from_byte_stream(
-                    demo_bytes)
-
-                get_annotated_video(
-                    temp_video_path, model, assigned_class_id=assigned_class_id, confidence=confidence)
-
-
+                
+                response = requests.post(predict_video_url, data=video_dict)
+                                
     elif choice == "Live":
         st.subheader("Live Action!")
 
@@ -153,16 +171,24 @@ def main():
         if data_file is not None:
             with st.expander('Click to see the result!'):
                 st.write('Drumroolllls!!!')
-                resized_img = get_image_from_serialized(
-                    data_file, dsize=(640, 640))
+                
+                if assigned_class_id == None:
+                    assigned_class_id = "a"
+                    image_dict = {
+                                "resized_img": base64.b64encode(data_file.getvalue()).decode('utf-8'),
+                                "confidence": str(confidence),
+                                "assigned_class_id": assigned_class_id
+                                }
+                else:
+                    image_dict = {
+                                "resized_img": base64.b64encode(data_file.getvalue()).decode('utf-8'),
+                                "confidence": str(confidence),
+                                "assigned_class_id": ",".join(str(e) for e in assigned_class_id)
+                                }
 
-                result = get_predictions(
-                    model, resized_img, classes=assigned_class_id, conf=confidence)
-
-                for r in result:
-                    im_array = r.plot()  # plot a BGR numpy array of predictions
-
-                    st.image(im_array, caption='Applied Model')
+                response = requests.post(predict_url, data=image_dict)
+  
+                st.image(base64.b64decode((response.text)))
 
 
 if __name__ == '__main__':

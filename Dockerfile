@@ -11,3 +11,4 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health
 ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+#CMD uvicorn api.simple:app --host 0.0.0.0 --port $PORT

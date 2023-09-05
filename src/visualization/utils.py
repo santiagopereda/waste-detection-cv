@@ -1,6 +1,7 @@
 import os
 import cv2
 import glob
+import base64
 import random
 import tempfile
 import numpy as np
@@ -56,6 +57,32 @@ def create_temp_video_from_byte_stream(video_bytes):
     return output_path
 
 
+
+
+def get_image_from_buffer(img):
+    buffer = base64.b64decode(img)
+    jpg_image = np.frombuffer(buffer, dtype=np.uint8)
+    #image = cv2.imdecode(jpg_image, flags=cv2.IMREAD_COLOR)
+    imageBGR = cv2.imdecode(jpg_image, cv2.IMREAD_ANYCOLOR)
+    # Resizes the image
+    resized_img = cv2.resize(imageBGR, dsize=(640,640),
+                             interpolation=cv2.INTER_AREA)
+    return resized_img
+
+def get_encoded_image(results):
+    filename = 'savedImage.jpg'
+    
+    cv2.imwrite(filename, results)
+    
+    img = cv2.imread('savedImage.jpg')
+    
+    _, buffer = cv2.imencode('.jpg', img)
+    img_bytes = buffer.tostring()
+
+    # Convertir los bytes a base64
+    return base64.b64encode(img_bytes).decode('utf-8')
+    
+
 def annotate_image(results, frame, classes):
     detections = sv.Detections.from_yolov8(results[0])
     box_annotator = sv.BoxAnnotator()
@@ -81,24 +108,23 @@ def get_annotated_video(video, model, assigned_class_id, confidence):
 
     classes = list(model.names.values())
 
-    with st.spinner("Creating video..."):
-        while cap.isOpened():
+    while cap.isOpened():
 
-            # Read a frame from the video
-            success, frame = cap.read()
+        # Read a frame from the video
+        success, frame = cap.read()
 
-            if success:
+        if success:
 
-                results = get_predictions(
-                    model, frame, classes=assigned_class_id, conf=confidence)
+            results = get_predictions(
+                model, frame, classes=assigned_class_id, conf=confidence)
 
-                annotated_frame = annotate_image(results, frame, classes)
+            annotated_frame = annotate_image(results, frame, classes)
 
-                image_list.append(annotated_frame)
+            image_list.append(annotated_frame)
 
-            else:
-                # Break the loop if the end of the video is reached
-                break
+        else:
+            # Break the loop if the end of the video is reached
+            break
 
         cap.release()
 
