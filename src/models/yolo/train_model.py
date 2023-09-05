@@ -1,59 +1,85 @@
+import yaml
+import glob
 from ultralytics import YOLO
-from roboflow import Roboflow
-from src.models.params import *
+from src.params_yolo import *
+from src.models.yolo.utils import get_user_input
+from src.data.make_dataset import get_models_folder
 
-
-def get_data(api_key: str, workspace: str, project: str, version: str,data_type: str, location: str) -> str:
-    """
-    Downloads a dataset version from Roboflow using the provided API key and saves it to the specified location.
-
-    Args:
-        api_key (str): Your Roboflow API key for authentication.
-        workspace (str): The name of the workspace containing the project.
-        project (str): The name of the project containing the desired dataset version.
-        version (str): The version of the dataset to be downloaded.
-        location (str): The local directory where the dataset will be saved.
-
-    Returns:
-        str: Confirmation message indicating the location where the data was saved.
-    """
-    # Initialize the Roboflow instance with the provided API key
-    rf = Roboflow(api_key=api_key)
-
-    # Access the specified workspace and project using the Roboflow instance
-    project = rf.workspace(workspace).project(project)
-
-    # Access the desired dataset version within the project and download it to the specified location
-    dataset = project.version(version).download(data_type, location)
-
-    # Print a success message
-    print(f"✅ Data saved in {location}")
-
-    # Return a confirmation message
-    return dataset
-
-
-def define_model(source: str) -> YOLO:
+def define_model(model_target = None, name=None) -> YOLO:
     """
     Defines and initializes a YOLO model using the provided source.
     Args:
-        source (str): The source for initializing the YOLO model.
+        model_target (str): The source for initializing the YOLO model.
     Returns:
         YOLO: The initialized YOLO model.
+    """    
+    models_location = get_models_folder()
+    try:
+        model_dir = os.path.join(models_location, CHECKPOINT_DIR, 'weights')
+        if model_target == 'best' and name == None:
+            source = os.path.join(model_dir, 'best.pt')
+            model = YOLO(source)
+            # Print a message indicating the model being used
+            print(f"✅ Initiatizing last trained models with the best weights")
+            return model
+        elif model_target == 'local' and name == None:
+            available_files = glob.glob(os.path.join(models_location,'*.pt'))
+            if len(available_files) == 1:
+                model = YOLO(available_files[0])
+            elif len(available_files) > 1:
+                selected_file = get_user_input(available_files)
+                model = YOLO(selected_file)
+            return model
+        elif model_target == None and name != None:
+            model = YOLO(name)
+            (f"✅ Initializing pretrained model: {name}")
+            return model
+        else:
+            model = YOLO('yolov8n.pt')
+            (f"✅ Initializing pretrained model: 'yolov8n.pt'")
+            return model
+            
+    except TypeError:
+        model = None
+        print(f"🚫 Please specify the model name")
+        
+    except FileNotFoundError:
+        model = None
+        print(f"🚫 Please verify source path: {model_dir}")
+        
+    except UnboundLocalError:
+        print(f"🚫 Select model with pretrained weights to initialize")
+        model = None
+        
+
+def get_dataset_classes():
     """
-    # Initialize the YOLO model using the provided source
-    model = YOLO(source)
+    Get the number of classes from a label map file.
 
-    # Print a message indicating the model being used
-    print(f"✅ Now training on model: {source.split('/')[-1]}")
+    This function loads a label map from the specified .pbtxt file, converts it to categories,
+    and then determines the number of unique classes present.
 
-    # Return the initialized model
-    return model
+    Args:
+        pbtxt_fname (str): File path to the label map in .pbtxt format.
+
+    Returns:
+        int: Number of unique classes defined in the label map.
+    """
+
+    data_yaml = os.path.join(HOME, 'data', DATA_FOLDER_NAME, 'data.yaml')
+    
+    with open(data_yaml, 'r') as file:
+        data = yaml.safe_load(file)
+        
+    dataset_classes = data['names']
+    
+    
+    return dataset_classes
 
 
-def train_model(model=None, data=None, epochs=100, patience=10,
-                batch=16, imgsz=640, save_period=1, device=None, project=None, name=None,
-                exist_ok=False, pretrained=False, optimizer='auto', resume=False,
+def train_model(model=None, data=None, epochs=1000, patience=10,
+                batch=10, imgsz=640, save_period=1, device=None, project=None, name=None,
+                exist_ok=True, pretrained=False, optimizer='auto', resume=False,
                 lr0=0.01, lrf=0.01, dropout=0.0):
     """
     Trains a model using the provided data and settings.
@@ -79,20 +105,25 @@ def train_model(model=None, data=None, epochs=100, patience=10,
 
     Returns:
         The trained model.
-    """
+    """   
     try:
+        if data == None:
+            data_dir = os.path.join(HOME, 'data', DATA_FOLDER_NAME)
+            data = os.path.join(data_dir, 'data.yaml')            
+        if project == None:
+            project = os.path.join(HOME, 'models', 'yolov8')
+        if name == None:
+            name=CHECKPOINT_DIR
         trained_model = model.train(data=data, epochs=epochs, patience=patience,
-                                    batch=batch, imgsz=imgsz, save_period=save_period, device=device,
-                                    project=project, name=name, exist_ok=exist_ok, pretrained=pretrained,
-                                    optimizer=optimizer, resume=resume, lr0=lr0, lrf=lrf, dropout=dropout)
-
-    except (FileNotFoundError, RuntimeError):
-        print("Add Model or Data to train on")
-        traceback.print_exc()
+                                                batch=batch, imgsz=imgsz, save_period=save_period, device=device,
+                                                project=project, name=name, exist_ok=exist_ok, pretrained=pretrained,
+                                                optimizer=optimizer, resume=resume, lr0=lr0, lrf=lrf, dropout=dropout)
+    except (RuntimeError):
+        print(f"🚫 'data.yaml' file not found\n", "source path: {data}")
         trained_model = None
 
-    except Exception:
-        traceback.print_exc()
+    except AttributeError:
+        print(f"🚫 Can't train without and initialized model")
         trained_model = None
         
     return trained_model

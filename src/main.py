@@ -1,18 +1,24 @@
-from ultralytics import YOLO
-from src.models.params import *
-from src.models.yolo.train_model import get_data, define_model, train_model
-from src.models.yolo.predict_model import get_predictions, get_predicted_classes, get_predicted_shape, get_predicted_speed
+from src.data import *
+from src.params_yolo import *
+from src.data.make_dataset import load_data, save_model_gcp
+from src.models.yolo.train_model import define_model, train_model
 
-model_path = '/home/spereda/code/santiagopereda/08-Project/waste-detection-cv/models/yolo_v8'
 
-model_name = ['yolov8n.pt', 'yolov8n-cls.pt', 'yolov8m-cls.pt']
+def master_yolo():
 
-pt_model = model_path +'/'+ model_name[0]
+    load_data(key=API_KEY, project=WORKSPACE_PROJECT,
+              version=WORKSPACE_PROJECT_VERSION, data_type=DATA_TYPE)
+    print("✅ Data loading is completed")
 
-project = '/home/spereda/code/santiagopereda/08-Project/waste-detection-cv/models'
+    model = define_model(model_target=MODEL_TARGET)
+    print("🚀 Model is ready to train")
 
-get_data(API_KEY, WORKSPACE, PROJECT, VERSION, LOCATION)
+    results = train_model(model=model, epochs=EPOCHS,
+                          patience=PATIENCE, device=DEVICE, optimizer=OPTIMIZER)
+    print('🏁 Model is now ready')
+    if MODEL_SAVE == 'gcp':
+        save_model_gcp()
 
-model = YOLO(pt_model)
 
-results = train_model(model=model, data='/home/spereda/code/santiagopereda/08-Project/waste-detection-cv/data/yolov8/LeWagon-1/data.yaml', epochs=1, project=project, name=CHECKPOINT_DIR, exist_ok=True, resume=False)
+if __name__ == "__main__":
+    master_yolo()
