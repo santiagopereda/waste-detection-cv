@@ -27,7 +27,7 @@ def load_data(key=API_KEY,
     data_dir = os.path.join(HOME, 'data', DATA_FOLDER_NAME)
     print("🔍 Searching for existing data directory")
     if not os.path.exists(data_dir):
-        print("data folder doesn't exist, creating directory")        
+        print("data folder doesn't exist, creating directory")
         os.makedirs(data_dir)
         save_location = get_data_folder()
     data_yaml = os.path.join(data_dir, 'data.yaml')
@@ -41,7 +41,7 @@ def load_data(key=API_KEY,
     else:
         save_location = get_data_folder()
         print(f"✅ Using previously downloaded data")
-        
+
     return save_location
 
 
@@ -56,11 +56,11 @@ def get_data_folder():
 
     Returns:
         str: The path to the data folder.
-        
-    """ 
+
+    """
     # Go up two levels to waste-detection-cv
     data_dir = os.path.join(HOME, 'data')
-    
+
     # Check if 'data' directory exists, and create it if not
     if not os.path.exists(data_dir):
         print('📂 Creating a directory "data"')
@@ -89,13 +89,15 @@ def get_models_folder():
         str: The path to the data folder.
     """ # Go up two levels to waste-detection-cv
     models_dir = os.path.join(HOME, 'models')
-    
+
     # Check if 'data' directory exists, and create it if not
     if not os.path.exists(models_dir):
         print('📂 Creating a directory "models"')
         os.makedirs(models_dir)
 
     models_folder = os.path.join(models_dir, DATA_FOLDER_NAME)  # Join with DATA_FOLDER_NAME
+    print(models_dir)
+    print(models_folder)
 
     # Check if 'model' directory exists under data, and create it if not
     if not os.path.exists(models_folder):
@@ -141,15 +143,9 @@ def save_model_gcp():
         object_name_in_gcs_bucket.upload_from_filename(local_directory)
         print(f'💾 {name} saved in {BUCKET_NAME}')
     except UnboundLocalError:
-        print(f"🚫 Key not found in {KEY_LOCATION}") 
-        print("Model not saved")   
+        print(f"🚫 Key not found in {KEY_LOCATION}")
+        print("Model not saved")
     except exceptions.NotFound:
         print(f"🚫 Can't find {BUCKET_NAME} in buckets, please verify bucket name")
         print("Model not saved")
-
-if __name__ == '__main__':
-    loaded_dataset = load_data(API_KEY,
-                              WORKSPACE_PROJECT,
-                              WORKSPACE_PROJECT_VERSION,
-                              DATA_TYPE)
 

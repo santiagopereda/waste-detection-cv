@@ -11,9 +11,9 @@ def use_requests(api_url, params):
 
 def main():
 
-    predict_url = 'http://127.0.0.1:8000/predict_photo'
-    
-    predict_video_url = 'http://127.0.0.1:8000/predict_video'
+    predict_url = f'{SERVICE_URL}/predict_photo'
+
+    service_url = SERVICE_URL
 
     supported_image_list = ['bmp', 'dng', 'jpeg',
                             'jpg', 'mpo', 'png', 'tif', 'tiff', 'webp', 'pfm']
@@ -21,7 +21,7 @@ def main():
     supported_video_list = ['asf', 'avi', 'gif', 'm4v',
                             'mkv', 'mov', 'mp4', 'mpeg', 'mpg', 'ts', 'wmv', 'webm']
 
-    category_names = requests.get("http://127.0.0.1:8000/classes").json()
+    category_names = requests.get(f"{SERVICE_URL}/classes").json()
 
     # Empieza el flow
 
@@ -81,7 +81,7 @@ def main():
 
                 file_details = {"Filename": data_file.name,
                                 "FileType": data_file.type, "FileSize": data_file.size}
-                
+
                 if assigned_class_id == None:
                     assigned_class_id = "a"
                     image_dict = {
@@ -95,10 +95,10 @@ def main():
                                 "confidence": str(confidence),
                                 "assigned_class_id": ",".join(str(e) for e in assigned_class_id)
                                 }
-                
-                
+
+
                 response = requests.post(predict_url, data=image_dict)
-                
+
                 st.image(base64.b64decode((response.text)))
 
     elif choice == "Video":
@@ -121,7 +121,7 @@ def main():
 
         data_file = st.sidebar.file_uploader(
             "Upload Video", type=supported_video_list)
-        
+
         if data_file:
             demo_bytes = create_temporary_file(
                 data_file, ext='.avi', delete=False)
@@ -129,7 +129,7 @@ def main():
             st.sidebar.text('Input Video')
 
             st.video(demo_bytes)
-            
+
             if assigned_class_id == None:
                 assigned_class_id = "a"
                 video_dict = {
@@ -145,10 +145,10 @@ def main():
                             }
 
 
-            if st.sidebar.button("Test Model"):
-                
-                response = requests.post(predict_video_url, data=video_dict)
-                                
+            # if st.sidebar.button("Test Model"):
+
+            #     response = requests.post(predict_video_url, data=video_dict)
+
     elif choice == "Live":
         st.subheader("Live Action!")
 
@@ -171,7 +171,7 @@ def main():
         if data_file is not None:
             with st.expander('Click to see the result!'):
                 st.write('Drumroolllls!!!')
-                
+
                 if assigned_class_id == None:
                     assigned_class_id = "a"
                     image_dict = {
@@ -187,7 +187,7 @@ def main():
                                 }
 
                 response = requests.post(predict_url, data=image_dict)
-  
+
                 st.image(base64.b64decode((response.text)))
 
 

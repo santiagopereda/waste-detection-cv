@@ -34,18 +34,18 @@ async def predict(
     if assigned_class_id == 'a':
         assigned_class_id = None
     confidence = float(confidence)
-    
+
     resized_img = get_image_from_buffer(resized_img)
-    
+
     result = get_predictions(app.state.model, source=resized_img, conf=confidence,classes=assigned_class_id)
-    
+
     for r in result:
         im_array = r.plot()
 
     img_base64 = get_encoded_image(im_array)
-    
+
     return (img_base64)
-    
+
 @app.post("/predict_video")
 async def predict(
     video: Annotated[bytes, File()],
@@ -55,12 +55,12 @@ async def predict(
     if assigned_class_id == 'a':
         assigned_class_id = None
     confidence = float(confidence)
-    
+
     demo_bytes = create_temporary_file(
                 video, ext='.avi', delete=False)
-    
+
     print(demo_bytes)
-    
+
     msg = 'ok'
-    
+
     return (msg)

@@ -13,8 +13,8 @@ def master_yolo():
     model = define_model(model_target=MODEL_TARGET)
     print("🚀 Model is ready to train")
 
-    results = train_model(model=model, epochs=EPOCHS,
-                          patience=PATIENCE, device=DEVICE, optimizer=OPTIMIZER)
+    results = train_model(model=model, epochs=int(EPOCHS),
+                          patience=int(PATIENCE), device=DEVICE, optimizer=OPTIMIZER)
     print('🏁 Model is now ready')
     if MODEL_SAVE == 'gcp':
         save_model_gcp()
