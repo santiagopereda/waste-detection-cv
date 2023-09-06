@@ -89,5 +89,8 @@ target/
 # Mypy cache
 .mypy_cache/
 
+# images
+*.jpg
 
-hardy-audio-397320-440a6aebad09.json
+# .json
+*.json
