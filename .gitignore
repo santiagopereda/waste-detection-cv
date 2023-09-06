@@ -94,3 +94,6 @@ target/
 
 # .json
 *.json
+
+# .pretrained_weights
+*.pt
