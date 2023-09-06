@@ -3,7 +3,7 @@ import glob
 from datetime import datetime
 from roboflow import Roboflow
 from src.params_yolo import *
-from gcloud import storage,exceptions
+from gcloud import storage, exceptions
 from src.models.yolo.utils import get_user_input
 
 
@@ -41,9 +41,8 @@ def load_data(key=API_KEY,
     else:
         save_location = get_data_folder()
         print(f"✅ Using previously downloaded data")
-
+        
     return save_location
-
 
 
 def get_data_folder():
@@ -66,7 +65,8 @@ def get_data_folder():
         print('📂 Creating a directory "data"')
         os.makedirs(data_dir)
 
-    data_folder = os.path.join(data_dir, DATA_FOLDER_NAME)  # Join with DATA_FOLDER_NAME
+    # Join with DATA_FOLDER_NAME
+    data_folder = os.path.join(data_dir, DATA_FOLDER_NAME)
 
     # Check if 'model' directory exists under data, and create it if not
     if not os.path.exists(data_folder):
@@ -74,7 +74,6 @@ def get_data_folder():
         os.makedirs(data_folder)
 
     return data_folder
-
 
 
 def get_models_folder():
@@ -87,7 +86,7 @@ def get_models_folder():
 
     Returns:
         str: The path to the data folder.
-    """ # Go up two levels to waste-detection-cv
+    """  # Go up two levels to waste-detection-cv
     models_dir = os.path.join(HOME, 'models')
 
     # Check if 'data' directory exists, and create it if not
@@ -95,9 +94,9 @@ def get_models_folder():
         print('📂 Creating a directory "models"')
         os.makedirs(models_dir)
 
+
     models_folder = os.path.join(models_dir, DATA_FOLDER_NAME)  # Join with DATA_FOLDER_NAME
-    print(models_dir)
-    print(models_folder)
+
 
     # Check if 'model' directory exists under data, and create it if not
     if not os.path.exists(models_folder):
@@ -128,16 +127,19 @@ def save_model_gcp():
         if DATA_FOLDER_NAME == 'yolov8':
             model_to_save = 'best.pt'
             print(f"🔍 Searching for best weights for model {DATA_FOLDER_NAME}")
-            local_directory = os.path.join(models_location, CHECKPOINT_DIR, 'weights', model_to_save)
-        now = datetime.now().strftime("%d/%m/%Y %H:%M:%S").replace(' ', '-').replace(':', '-').replace('/', '-')
+            local_directory = os.path.join(
+                models_location, CHECKPOINT_DIR, 'weights', model_to_save)
+        now = datetime.now().strftime("%d/%m/%Y %H:%M:%S").replace(' ',
+                                                                   '-').replace(':', '-').replace('/', '-')
         name = now + '-' + model_to_save
-        available_files = glob.glob(os.path.join(HOME,'*.json'))
+        available_files = glob.glob(os.path.join(HOME, '*.json'))
         if len(available_files) == 1:
             key_location = available_files[0]
         elif len(available_files) > 1:
             key_location = get_user_input(available_files)
         print(f'📡 Establishing connection with Gooogle Cloud Storage')
-        client = storage.Client.from_service_account_json(json_credentials_path=key_location)
+        client = storage.Client.from_service_account_json(
+            json_credentials_path=key_location)
         bucket = client.get_bucket(BUCKET_NAME)
         object_name_in_gcs_bucket = bucket.blob(name)
         object_name_in_gcs_bucket.upload_from_filename(local_directory)
@@ -148,4 +150,3 @@ def save_model_gcp():
     except exceptions.NotFound:
         print(f"🚫 Can't find {BUCKET_NAME} in buckets, please verify bucket name")
         print("Model not saved")
-

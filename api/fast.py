@@ -31,8 +31,6 @@ async def predict(
     confidence: Annotated[str, Form()],
     assigned_class_id: Annotated[str, Form()],
 ):
-
-    print(assigned_class_id)
     if assigned_class_id == "Empty":
         assigned_class_id = None
     else:

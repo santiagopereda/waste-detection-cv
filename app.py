@@ -17,6 +17,7 @@ def main():
 
     predict_video_url = f'{SERVICE_URL}/predict_video'
 
+
     supported_image_list = ['bmp', 'dng', 'jpeg',
                             'jpg', 'mpo', 'png', 'tif', 'tiff', 'webp', 'pfm']
 
