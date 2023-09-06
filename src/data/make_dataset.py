@@ -41,7 +41,7 @@ def load_data(key=API_KEY,
     else:
         save_location = get_data_folder()
         print(f"✅ Using previously downloaded data")
-
+        
     return save_location
 
 
@@ -94,8 +94,9 @@ def get_models_folder():
         print('📂 Creating a directory "models"')
         os.makedirs(models_dir)
 
-    # Join with DATA_FOLDER_NAME
-    models_folder = os.path.join(models_dir, DATA_FOLDER_NAME)
+
+    models_folder = os.path.join(models_dir, DATA_FOLDER_NAME)  # Join with DATA_FOLDER_NAME
+
 
     # Check if 'model' directory exists under data, and create it if not
     if not os.path.exists(models_folder):
@@ -147,6 +148,5 @@ def save_model_gcp():
         print(f"🚫 Key not found in {KEY_LOCATION}")
         print("Model not saved")
     except exceptions.NotFound:
-        print(
-            f"🚫 Can't find {BUCKET_NAME} in buckets, please verify bucket name")
+        print(f"🚫 Can't find {BUCKET_NAME} in buckets, please verify bucket name")
         print("Model not saved")

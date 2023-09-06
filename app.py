@@ -13,9 +13,10 @@ def use_requests(api_url, params):
 
 def main():
 
-    predict_url = 'http://127.0.0.1:8000/predict_photo'
+    predict_url = f'{SERVICE_URL}/predict_photo'
 
-    predict_video_url = 'http://127.0.0.1:8000/predict_video'
+    predict_video_url = f'{SERVICE_URL}/predict_video'
+
 
     supported_image_list = ['bmp', 'dng', 'jpeg',
                             'jpg', 'mpo', 'png', 'tif', 'tiff', 'webp', 'pfm']
@@ -23,7 +24,7 @@ def main():
     supported_video_list = ['asf', 'avi', 'gif', 'm4v',
                             'mkv', 'mov', 'mp4', 'mpeg', 'mpg', 'ts', 'wmv', 'webm']
 
-    category_names = requests.get("http://127.0.0.1:8000/classes").json()
+    category_names = requests.get(f"{SERVICE_URL}/classes").json()
 
     # Empieza el flow
 

@@ -29,7 +29,11 @@ OPTIMIZER = os.environ.get("OPTIMIZER")
 if os.environ.get("KEY_LOCATION") == None:
     KEY_LOCATION = os.path.dirname(os.path.realpath(__file__))
 else:
-    KEY_LOCATION = os.environ.get("KEY_LOCATION")    
+    KEY_LOCATION = os.environ.get("KEY_LOCATION")
 BUCKET_NAME = os.environ.get("BUCKET_NAME")
 
-################## TRAINING PARAMS #################
+################## API on gcloud #################
+GCR_IMAGE = os.environ.get("GCR_IMAGE")
+GCR_REGION = os.environ.get("GCR_REGION")
+GCR_MEMORY = os.environ.get("GCR_MEMORY")
+SERVICE_URL = os.environ.get("SERVICE_URL")
