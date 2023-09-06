@@ -31,8 +31,13 @@ async def predict(
     confidence: Annotated[str, Form()],
     assigned_class_id: Annotated[str, Form()],
 ):
-    if assigned_class_id == 'a':
+
+    print(assigned_class_id)
+    if assigned_class_id == "Empty":
         assigned_class_id = None
+    else:
+        assigned_class_id = [int(num) for num in assigned_class_id.split(',')]
+
     confidence = float(confidence)
 
     resized_img = get_image_from_buffer(resized_img)
@@ -54,6 +59,8 @@ async def predict(
 ):
     if assigned_class_id == 'a':
         assigned_class_id = None
+    else:
+        [int(num) for num in assigned_class_id.split(',')]
     confidence = float(confidence)
 
     demo_bytes = create_temporary_file(
