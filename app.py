@@ -65,23 +65,24 @@ def main():
     """,
         unsafe_allow_html=True,
     )
+    
+    
+    st.markdown(
+         f"""
+         <style>
+         .stApp {{
+             background-image: url("https://wallpaperbat.com/img/289369-neural-networks-the-theoretical-understanding-being-data-scientist.jpg");
+             background-attachment: fixed;
+             background-size: cover
+         }}
+         </style>
+         """,
+         unsafe_allow_html=True
+    )
 
-    # st.markdown(
-    #      f"""
-    #      <style>
-    #      .stApp {{
-    #          background-image: url("background.jpg");
-    #          background-attachment: fixed;
-    #          background-size: cover
-    #      }}
-    #      </style>
-    #      """,
-    #      unsafe_allow_html=True
-    # )
+    menu = ["About", "Image", "Live"]
 
-    menu = ["Image", "Live", "About"]
-
-    st.sidebar.subheader("Parameters")
+    st.sidebar.header("Parameters")
 
     # Todos los submenus
     choice = st.sidebar.selectbox("Choose App Mode", menu)
@@ -93,9 +94,9 @@ def main():
 
     elif choice == "Image":
 
-        st.subheader("**Deep learning-based waste detection model**")
+        st.header("**Deep learning-based waste detection model**")
 
-        st.markdown("Waste detection and classification")
+        st.subheader("Waste detection and classification")
 
         # Using custom classes for the prediction Bool
         custom_classes = st.sidebar.checkbox("Use Custom Classes")
@@ -155,7 +156,11 @@ def main():
                 with placeholder.container():
                     with st.spinner('Wait for it...'):
                         time.sleep(3)
-                    st.image(base64.b64decode((response.text)))
+                        
+
+                st.image(base64.b64decode(response.text), width=1000)
+     
+
 
     elif choice == "Video":
 
@@ -249,34 +254,45 @@ def main():
                 with st.spinner('Wait for it...'):
                     time.sleep(3)
 
-            st.write('Drumroolllls!!!')
+            st.subheader('Drumroolls!!! 🥁🥁🥁🥁🥁🥁🥁🥁')
             with st.expander('Click to see the result!'):
-
-                st.image(base64.b64decode((response.text)))
+                
+                st.image(base64.b64decode(response.text), width=650)
 
     elif choice == 'About':
-        st.subheader("**Deep learning-based waste detection model**")
+        st.header("**Deep learning-based waste detection model**")
 
-        st.subheader("**The Team**")
-
+        st.subheader(" ")
+        
+        st.subheader("Upload a picture or use or camera to try it yourself!")
+        
+        st.subheader(" ")
+        
+        st.subheader(" ")
+        
+        st.subheader(" ")
+        
+        st.subheader(" ")
+        
+        st.subheader(" ")
+        
+        st.subheader(" ")
+        
+        st.subheader(" ")
+        
+        st.subheader(" ")
+        
+        st.subheader(" ")
+        
         col1, col2, col3 = st.columns(3)
-
-        with col1:
-            st.markdown("Gurban Abbasov")
-            st.image('ga.jpg')
-            st.markdown("https://github.com/Gurban1990")
-
-        with col2:
-            st.markdown("Santiago Pereda")
-            st.image('sp.jpg')
-            st.markdown("https://github.com/santiagopereda")
-
-        with col3:
-            st.markdown("Vuyani Jaka")
-            st.image('vj.jpg')
-            st.markdown("https://github.com/Vuyani6")
-
-
+        
+        col1.write(' ')
+        
+        col2.image('qrcode.png', width=500)
+        
+        col3.write(' ')
+        
+        
 if __name__ == '__main__':
     try:
         main()
