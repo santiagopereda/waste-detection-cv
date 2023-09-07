@@ -66,6 +66,19 @@ def main():
         unsafe_allow_html=True,
     )
 
+    # st.markdown(
+    #      f"""
+    #      <style>
+    #      .stApp {{
+    #          background-image: url("background.jpg");
+    #          background-attachment: fixed;
+    #          background-size: cover
+    #      }}
+    #      </style>
+    #      """,
+    #      unsafe_allow_html=True
+    # )
+
     menu = ["Image", "Live", "About"]
 
     st.sidebar.subheader("Parameters")
@@ -125,7 +138,7 @@ def main():
 
             response = requests.post(predict_url, data=image_dict)
 
-            if st.sidebar.button("Test Model"):
+            if st.sidebar.button("Upload image"):
 
                 placeholder = st.empty()
 
@@ -182,7 +195,7 @@ def main():
                     "assigned_class_id": ",".join(str(e) for e in assigned_class_id)
                 }
 
-            if st.sidebar.button("Test Model"):
+            if st.sidebar.button("Upload image"):
 
                 response = requests.post(predict_video_url, data=video_dict)
 
