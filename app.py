@@ -2,8 +2,32 @@ import base64
 import time
 import requests
 import streamlit as st
-from src.params_yolo import *
-from src.visualization.utils import custom_clases, create_temporary_file
+import tempfile
+
+
+SERVICE_URL='https://object-detection-waste-tq3h7cadeq-ew.a.run.app'
+
+
+# Imported from utils.py
+def custom_clases(custom_classes, category_names):
+    assigned_class_id = []
+    if custom_classes:
+        assigned_class = st.sidebar.multiselect(
+            'Select Custom Classes', category_names, default=category_names[0])
+        for each in assigned_class:
+            assigned_class_id.append(category_names.index(each))
+        if assigned_class_id is not None:
+            return assigned_class_id
+        return None
+
+
+# Imported from utils.py
+def create_temporary_file(file_input, ext='.mp4', delete=False):
+    tpfile = tempfile.NamedTemporaryFile(suffix=ext, delete=delete)
+    tpfile.write(file_input.read())
+    demo_binary = open(tpfile.name, 'rb')
+    demo_bytes = demo_binary.read()
+    return demo_bytes
 
 
 def use_requests(api_url, params):
