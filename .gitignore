@@ -95,7 +95,7 @@ target/
 *.jpg
 
 # .json
-*.json
+gcloud_key.json
 
 # .pretrained_weights
 *.pt
