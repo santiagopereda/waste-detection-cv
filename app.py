@@ -80,7 +80,7 @@ def main():
          unsafe_allow_html=True
     )
 
-    menu = ["About", "Image", "Live"]
+    menu = ["Image", "Live", "About"]
 
     st.sidebar.header("Parameters")
 
@@ -265,14 +265,6 @@ def main():
         st.subheader(" ")
         
         st.subheader("Upload a picture or use or camera to try it yourself!")
-        
-        st.subheader(" ")
-        
-        st.subheader(" ")
-        
-        st.subheader(" ")
-        
-        st.subheader(" ")
         
         st.subheader(" ")
         
